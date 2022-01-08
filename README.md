@@ -1,6 +1,9 @@
-# credit
+# Credit
 Taken from the following github project
 https://github.com/big-data-europe/docker-hadoop
+
+Actual testing is done in another project
+https://github.com/jayachanders/docker-hadoop-spark
 
 # Changes
 
