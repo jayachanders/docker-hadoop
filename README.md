@@ -29,7 +29,6 @@ Run `docker network inspect` on the network (e.g. `dockerhadoop_default`) to fin
 * Resource manager: http://<dockerhadoop_IP_address>:8088/
 * Spark master: http://<dockerhadoop_IP_address>:8080/
 * Spark worker: http://<dockerhadoop_IP_address>:8081/
-* Hive: http://<dockerhadoop_IP_address>:10000
 * Hue (HDFS Filebrowser): http://<dockerhadoop_IP_address>:8088/home
 
 ## Connect to namenode , datanode, or other dockers
