@@ -8,3 +8,4 @@ build:
 	docker build -t bde2020/hadoop-resourcemanager:$(current_branch) ./resourcemanager
 	docker build -t bde2020/hadoop-nodemanager:$(current_branch) ./nodemanager
 	docker build -t bde2020/hadoop-historyserver:$(current_branch) ./historyserver
+	docker build -t bde2020/hive:$(current_branch) ./
