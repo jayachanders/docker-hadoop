@@ -88,3 +88,30 @@ Go to the command line of the Spark master and start PySpark.
   /spark/bin/pyspark --master spark://spark-master:7077
 ```
 Once connected to the pyspark, follow the commands associated with the spark.py
+
+# read data from hdfs in Spark:
+```
+brewfile = spark.read.csv("hdfs://namenode:9000/data/openbeer/breweries/breweries.csv")
+brewfile.show()
+
+df1 = spark.read.txt("hdfs://namenode:9000/dis_materials/hadoop_1m.txt")
+df1.show()
+
+```
+
+# Stop all dockers
+```
+docker stop $(docker ps -q)
+```
+
+# Start all stopped dockers
+```
+docker start $(docker ps -aq)
+```
+
+
+# Delete docker volumes:
+```
+docker rmi $(docker images 'bde2020/*')
+docker volume rm $(docker volume ls | grep 'docker-hadoop')
+```
