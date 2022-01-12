@@ -1,0 +1,85 @@
+#This file instructs how to setup a basic Hadoop environemnt and run sample Hadoop/Spark cluster
+#Data-Intensive Systems book and course updated in 2022 with Docker container based on Big Data Europe Project
+#Tested on MacOS 12.1 (with XCode), Windows 11 (WSL2 with Docker integration) and Ubuntu (requires sudo for most of commands)
+
+#Install Docker Desktop (recommended for Mac and Windows) or Docker through apt-get for Ubuntu
+#https://www.docker.com/products/docker-desktop
+
+#Clone GitHub repo
+git clone https://github.com/jayachanders/docker-hadoop.git
+
+#Clean containers/images if necessary to reinstall the whole setup
+#docker compose down #from 
+#docker rmi $(docker images 'bde2020/*') 
+#or worst case scenario: docker rm -f $(docker ps -a -q)
+#docker volume rm $(docker volume ls | grep 'docker-hadoop') 
+#or worst case scenario: docker volume rm $(docker volume ls -q)
+#or even worse scenario: docker volume prune
+
+#Start the setup
+docker compose up -d
+
+#Check that Docker containers are running and
+#that Hadoop cluster is running
+docker container ls
+http://localhost:9870/
+
+#Log in to docker containers (namenode, datanode, nodemanager) from local machine
+#and perform installation of necessary and useful packages
+docker exec -it namenode bash #docker exec -it datanode bash #docker exec -it nodemanager bash
+apt-get update
+apt-get install vim -y
+apt-get install -y less
+apt-get install python3 -y
+apt-get install python3-pip -y
+pip3 install mrjob
+#Ctrl-D or exit to go back to your local bash/terminal
+
+#Accessing docker container and copying data
+#Copy course materials from local machine to docker
+docker cp dis_materials namenode:/
+docker cp dis_materials spark-master:/
+docker cp dis_materials spark-worker:/
+
+#Copy data from docker container to HDFS
+docker exec -it namenode bash
+hadoop fs -mkdir /dis_materials
+hadoop fs -put dis_materials/*.txt dis_materials/*.csv /dis_materials
+
+#Check that data were copied
+hadoop fs -ls /dis_materials
+
+#Starting and stopping docker containers
+#Using any other way might result in losing some of the above installations
+docker stop $(docker ps -q)
+docker start $(docker ps -aq)
+
+#Analyzing unstructured data with Hadoop Streaming
+docker exec -it namenode bash
+cd dis_materials
+
+mapred streaming -files email_count_mapper.py,email_count_reducer.py \
+-input /dis_materials/hadoop_1m.txt \
+-output /dis_materials/output1 \
+-mapper "email_count_mapper.py" \
+-reducer "email_count_reducer.py"
+
+hadoop fs -text /dis_materials/output1/part* | less
+
+#Alternative, old-style, execution
+hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \
+    -mapper email_count_mapper.py \
+    -reducer email_count_reducer.py \
+    -input /dis_materials/hadoop_1m.txt \
+    -output /dis_materials/output1 \
+    -file email_count_mapper.py \
+    -file email_count_reducer.py
+
+#Analysing unstructured data with MRJob
+python3 count_sum.py --hadoop-streaming-jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///dis_materials/hadoop_1m.txt --output-dir hdfs:///dis_materials/output2 --no-output
+
+hadoop fs -text /dis_materials/output2/part* | less
+
+#Testing code without any Hadoop installation
+cat hadoop_1m.txt | ./email_count_mapper.py | sort -k1,1 | ./email_count_reducer.py
+python count_sum.py -r inline hadoop_1m.txt
