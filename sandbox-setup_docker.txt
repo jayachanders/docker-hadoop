@@ -16,7 +16,8 @@ git clone https://github.com/jayachanders/docker-hadoop.git
 #or worst case scenario: docker volume rm $(docker volume ls -q)
 #or even worse scenario: docker volume prune
 
-#Start the setup
+#Start the setup, from the folder cloned from GitHub
+cd docker-hadoop
 docker compose up -d
 
 #Check that Docker containers are running and
