@@ -1,6 +1,8 @@
 # Credit
-Taken from the following github project
+Taken from the following github projects
 https://github.com/big-data-europe/docker-hadoop
+https://github.com/big-data-europe/docker-spark
+https://github.com/big-data-europe/docker-hadoop-spark-workbench
 
 Actual testing is done in another project
 https://github.com/jayachanders/docker-hadoop-spark
