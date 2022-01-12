@@ -91,8 +91,8 @@ Once connected to the pyspark, follow the commands associated with the spark.py
 
 # read data from hdfs in Spark:
 ```
-brewfile = spark.read.csv("hdfs://namenode:9000/data/openbeer/breweries/breweries.csv")
-brewfile.show()
+df1 = spark.read.csv("hdfs://namenode:9000/dis_materials/hadoop_1m.csv")
+df1.show()
 
 df1 = spark.read.txt("hdfs://namenode:9000/dis_materials/hadoop_1m.txt")
 df1.show()
