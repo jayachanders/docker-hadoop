@@ -106,9 +106,21 @@ df1.show()
 docker stop $(docker ps -q)
 ```
 
+# Stop all dockers with bde2020 images only
+```
+docker ps -a | grep bde2020 | awk '{print $1}' | xargs docker stop
+docker stop $(docker ps -a | grep bde2020 | awk '{print $1}' )
+```
+
 # Start all stopped dockers
 ```
 docker start $(docker ps -aq)
+```
+
+# Start all dockers with bde2020 images only
+```
+docker ps -a | grep bde2020 | awk '{print $1}' | xargs docker start
+docker start $(docker ps -a | grep bde2020 | awk '{print $1}' )
 ```
 
 
