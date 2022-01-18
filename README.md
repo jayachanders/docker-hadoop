@@ -38,6 +38,9 @@ Go to the command line of the Spark master and start PySpark.
 ```
   docker exec -it namenode bash
 ```
+# If your docker containers are installations(applications) fail or slow. Add add google dns 
+vi /etc/resolv.conf
+nameserver 8.8.8.8
 
 ## Create a HDFS directory /dis_materials and Copy data to hdfs 
 ```
